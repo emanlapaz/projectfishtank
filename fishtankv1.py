@@ -52,7 +52,7 @@ def sensor_readings():
    accelerometer = round (sense_accel, 2)
 
 #prints the value in the console with 2 seconds delay
-   print("Temperature: %s C" % temp)
+   print("Temperature: %s C" % temperature)
    time.sleep(2)
    print("Humidity: %s %%" % humidity)
    time.sleep(2)
@@ -65,11 +65,11 @@ def sensor_readings():
 
 
 while True:
-    get_sensor_readings()
+    sensor_readings()
 
     for x in sense.stick.get_events():
         if x.direction == 'up':
-            sense.show_message("T: %s C" % temp)
+            sense.show_message("T: %s C" % temperature)
         elif x.direction == 'down':
             sense.show_message("H: %s " % humidity)
         elif x.direction == 'left':
