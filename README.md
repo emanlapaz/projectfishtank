@@ -39,3 +39,6 @@ c.	Security alarm: If lid open and joystick not pressed, light up after 1 minute
 a.	Right feed status- days due/ days overdue
 b.	Left cleaning status- days due/ days overdue
 6.	Optional: Controls the light source for day and night cycling.
+
+
+REFERENCES:
