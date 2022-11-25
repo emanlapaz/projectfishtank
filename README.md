@@ -15,8 +15,9 @@ b.	Temperature sensor for ambient room temperature
 c.	Gyroscope for lid opening
 d.	Joystick
 3.	Camera
-4.	Waterproof temperature probe (submerged in tank)
+4.	Waterproof temperature probe (submerged in tank) D18B20 with breakout board
 5.	Optional: Energenie Pi mote (optional to control the fish tank light cycles) or TPlink Kasa smart plugs
+
 
 Tech:
 1.	Wi-Fi
