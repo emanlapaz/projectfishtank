@@ -1,4 +1,4 @@
-#release 1: get the sensehat sensors and joystick working
+#release 1 v4: get the sensehat sensors and joystick working, photo when moved
 
 from sense_hat import SenseHat
 from datetime import datetime
@@ -10,10 +10,14 @@ import sys
 import os
 import glob
 import time
+from picamera import PiCamera
+import datetime
 
 #initial senseHat set up
 sense = SenseHat()
 sense.clear()
+camera = PiCamera()
+
 
 #senseHat LED colours
 blue = (0,0,255)
@@ -55,18 +59,17 @@ def sensor_readings():
    accelerometer= sense.get_accelerometer()
 
 
-#prints the value in the console with 2 seconds delay
+#prints the value in the console
    print("Temperature: %s C" % temperature)
-   print("Humidity: %s %%" % humidity)
-   print("Pressure: %s Millibars" % pressure)
-   print("Gyroscope p: {pitch}, r: {roll}, y: {yaw}".format(**gyroscope))
-   print("Accelerometer p: {pitch}, r: {roll}, y: {yaw}".format(**accelerometer))
+   #print("Humidity: %s %%" % humidity)
+   #print("Pressure: %s Millibars" % pressure)
+   #print("Gyroscope p: {pitch}, r: {roll}, y: {yaw}".format(**gyroscope))
+   #print("Accelerometer p: {pitch}, r: {roll}, y: {yaw}".format(**accelerometer))
 
+# captures a photo when lid is moved- can only take one photo and Overwrites
 def lid_moved():
-    if gyroscope != 0:
-        print("lid moved")
-
-def was_moved():
+        camera.start_preview()
+        frame = 1
         accel = sense.get_accelerometer_raw()
         x = accel['x']
         y = accel['y']
@@ -77,17 +80,17 @@ def was_moved():
         z = abs(z)
 
         if x > 1 or y > 1 or z > 1:
-            print("lid was moved")
+            fileLoc = f'/home/pi/fishtank/images/frame{frame}.jpg' # set the location of image file and current time
+            currentTime = datetime.datetime.now().strftime("%H:%M:%S")
+            camera.capture(fileLoc) # capture image and store in fileLoc
+            print("lid was moved- photo taken")
+            print(f'frame {frame} taken at {currentTime}') # print frame number to console
+            frame += 1
+
         else:
             sense.clear
 
-"""def blink():
-        red = LED(18)
-        red.on()
-        sleep(1)
-        red.off()
-        sleep(1)
- """
+
 # water temperature function: returns celcius---- remove farhenheit reading
 # reference: https://pimylifeup.com/raspberry-pi-temperature-sensor/
 def water_temp(): 
@@ -113,20 +116,15 @@ def water_temp():
             if equals_pos != -1:
                 temp_string = lines[1][equals_pos+2:]
             temp_c = float(temp_string) / 1000.0
-            temp_f = temp_c * 9.0 / 5.0 + 32.0
-            return temp_c #, temp_f
-        #print(read_temp())
+            return temp_c
+
         print("Water Temperature: %s C" % read_temp())
-        #while True:
-	       
-	       #time.sleep(1)
 
                 
 while True:
     sensor_readings()
-    time.sleep(1)
     water_temp()
-    time.sleep(1)
+    lid_moved()
     for x in sense.stick.get_events():
         if x.direction == 'up':
             sense.show_message("T: %s C" % temperature)
@@ -138,9 +136,6 @@ while True:
             sense.show_message("Hi")
         elif x.direction == 'middle':
             sense.clear
-    #lid_moved()
-    was_moved()
-    #blink()
     sense.clear
 
     
