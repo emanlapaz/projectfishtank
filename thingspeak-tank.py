@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+#to do: clean up code and add comments
 
 import paho.mqtt.client as mqtt
 from urllib.parse import urlparse
