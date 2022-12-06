@@ -22,11 +22,12 @@ d.	Joystick
 
 Tech:
 1.	Wi-Fi
-2.	Thingspeak for stats
+2.	Blynk for button and charts
 a.	Water temperature
 b.	Ambient temperature
-c.	Feed pattern (dates done)
-d.	Cleaning pattern (dates done)
+c.	Feed pattern
+d.	Cleaning pattern
+e. 	Alarm Triggered
 3.	Blynk for Mobile app connection
 
 Applications:
