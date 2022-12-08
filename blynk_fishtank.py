@@ -1,11 +1,11 @@
-#Project FishTank
-#Eugenio Manlapaz
-# This is a Blynk IOT project using Python
+#work on ALARM, FEED, CLEAN
+
 import BlynkLib
 import os
 import glob
 import time
 from sense_hat import SenseHat
+from datetime import datetime
  
 os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
@@ -13,6 +13,7 @@ os.system('modprobe w1-therm')
 BLYNK_AUTH = 'D_mFZtGQutqMZJFeSFj9MDUb7IknvwqN'
 blynk = BlynkLib.Blynk(BLYNK_AUTH) 
 
+now = datetime.now()
 sense = SenseHat()
 sense.clear()
 red = (255,0,0)
@@ -26,17 +27,20 @@ device_folder1 = glob.glob(base_dir + '28*')[1]
 device_file = device_folder + '/w1_slave'
 device_file1 = device_folder1 + '/w1_slave'
 
+#Alarm Button
 @blynk.on("V0")
-def v0_write_handler(value):
+def alarm_button(value):
     buttonValue=value[0]
     print(f'Current button value: {buttonValue}')
     if buttonValue =="1":
         sense.show_message("ARMED!", text_colour = red)
+
     elif buttonValue =="0":
         sense.show_message("DISARMED!", text_colour = green)
 
+#Water Temperature
 @blynk.on("V1")
-def v1_write_handler():
+def tank_temp():
 
         def read_rom():
             name_file = device_folder+'/name'
@@ -63,9 +67,10 @@ def v1_write_handler():
             return temp_c
 
         return water_temp()
-        
+
+#Room Temperature       
 @blynk.on("V2")
-def v2_write_handler():
+def ambient_temp():
 
         def read_rom1():
             name_file1 = device_folder1+'/name'
@@ -91,19 +96,49 @@ def v2_write_handler():
 
         return room_temp()
 
+#Alarm Triggered
+# TRY FSR?? or Gyroscope
+@blynk.on("V9")
+def alarm_triggered():
+        accel = sense.get_accelerometer_raw()
+        x = accel['x']
+        y = accel['y']
+        z = accel['z']
+
+        x = abs(x)
+        y = abs(y)
+        z = abs(z)
+
+        if x > 1 or y > 1 or z > 1:
+            sense.show_message("Warning!!", text_colour = red)
+            return 1
+            
+        else:
+            return 0
+
+
+#Water Status
 @blynk.on("V10")
-def v10_write_handler():
-    #water_status = v1_write_handler()
-    if v1_write_handler() <= 24:
-        return 0
-    elif v1_write_handler() >= 28:
-        return 2
-    else:
-        return 1
+def water_status():
+        water_temp = tank_temp()
+        if water_temp <= 24:
+            return 0
+        elif water_temp >= 28:
+            return 2
+        else:
+            return 1
+"""
+@blynk.on("V11")
+def triggered_date():
+        dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+        if alarm_triggered() == 1:
+            return  dt_string
+"""
 
 while True:
         blynk.run()
         time.sleep(.5)
-        blynk.virtual_write(1, v1_write_handler())
-        blynk.virtual_write(2, v2_write_handler())
-        blynk.virtual_write(10, v10_write_handler())
+        blynk.virtual_write(1, tank_temp())
+        blynk.virtual_write(2, ambient_temp())
+        blynk.virtual_write(9, alarm_triggered())
+        blynk.virtual_write(10, water_status())
