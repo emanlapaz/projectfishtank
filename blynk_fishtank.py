@@ -1,83 +1,56 @@
-#!/usr/bin/python3
-#to do: clean up code and add comments
-
-import paho.mqtt.client as mqtt
-from urllib.parse import urlparse
-import sys
-import time
-from sense_hat import SenseHat
-import logging
-from dotenv import dotenv_values
-from datetime import datetime
-from time import sleep
-from random import randint
-import random, time
+#Project FishTank
+#Eugenio Manlapaz
+# This is a Blynk IOT project using Python
+import BlynkLib
 import os
 import glob
-from picamera import PiCamera
-import datetime
+import time
+from sense_hat import SenseHat
+ 
+os.system('modprobe w1-gpio')
+os.system('modprobe w1-therm')
 
+BLYNK_AUTH = 'D_mFZtGQutqMZJFeSFj9MDUb7IknvwqN'
+blynk = BlynkLib.Blynk(BLYNK_AUTH) 
 
-#Initialise SenseHAT
 sense = SenseHat()
 sense.clear()
+red = (255,0,0)
+blue = (0,0,255)
+green = (0,255,0)
 
-#load MQTT configuration values from .env file
-config = dotenv_values(".env")
+global base_dir
+base_dir = '/sys/bus/w1/devices/'
+device_folder = glob.glob(base_dir + '28*')[0]
+device_folder1 = glob.glob(base_dir + '28*')[1]
+device_file = device_folder + '/w1_slave'
+device_file1 = device_folder1 + '/w1_slave'
 
-#configure Logging
-logging.basicConfig(level=logging.INFO)
+@blynk.on("V0")
+def v0_write_handler(value):
+    buttonValue=value[0]
+    print(f'Current button value: {buttonValue}')
+    if buttonValue =="1":
+        sense.show_message("ARMED!", text_colour = red)
+    elif buttonValue =="0":
+        sense.show_message("DISARMED!", text_colour = green)
 
-# Define event callbacks for MQTT
-def on_connect(client, userdata, flags, rc):
-    logging.info("Connection Result: " + str(rc))
+@blynk.on("V1")
+def v1_write_handler():
 
-def on_publish(client, obj, mid):
-    logging.info("Message Sent ID: " + str(mid))
-
-mqttc = mqtt.Client(client_id=config["clientId"])
-
-# Assign event callbacks
-mqttc.on_connect = on_connect
-mqttc.on_publish = on_publish
-
-# parse mqtt url for connection details
-url_str = sys.argv[1]
-print(url_str)
-url = urlparse(url_str)
-base_topic = url.path[1:]
-
-# Configure MQTT client with user name and password
-mqttc.username_pw_set(config["username"], config["password"])
-
-#Connect to MQTT Broker
-mqttc.connect(url.hostname, url.port)
-mqttc.loop_start()
-
-#Set Thingspeak Channel to publish to
-topic = "channels/"+config["channelId"]+"/publish"
-
-def room_temp():
-        temp=round(sense.get_temperature(),2)
-        payload="field1="+str(temp)
-        mqttc.publish(topic, payload)
-        time.sleep(int(config["transmissionInterval"]))
-        print("Temperature: %s C" % temp)
-
-def water_temp(): 
-        os.system('modprobe w1-gpio')
-        os.system('modprobe w1-therm')
-        base_dir = '/sys/bus/w1/devices/'
-        device_folder = glob.glob(base_dir + '28*')[0]
-        device_file = device_folder + '/w1_slave'
+        def read_rom():
+            name_file = device_folder+'/name'
+            f = open(name_file,'r')
+            #print('f:',f)
+            return f.readline()
  
         def read_temp_raw():
             f = open(device_file, 'r')
             lines = f.readlines()
             f.close()
             return lines
- 
-        def read_temp():
+
+        def water_temp():
             lines = read_temp_raw()
             while lines[0].strip()[-3:] != 'YES':
                 time.sleep(0.2)
@@ -88,18 +61,49 @@ def water_temp():
                 temp_string = lines[1][equals_pos+2:]
             temp_c = float(temp_string) / 1000.0
             return temp_c
+
+        return water_temp()
         
-        #temp=round(sense.get_temperature(),2)
-        payload="field2="+str(water_temp())
-        mqttc.publish(topic, payload)
-        time.sleep(int(config["transmissionInterval"]))
+@blynk.on("V2")
+def v2_write_handler():
 
-        print("Water Temperature: %s C" % water_temp())
+        def read_rom1():
+            name_file1 = device_folder1+'/name'
+            g = open(name_file1,'r')
+            #print('g:',g)
+            return g.readline()
 
-# Publish a message to temp every 15 seconds
+        def read_temp_raw1():
+            g = open(device_file1, 'r')
+            lines1 = g.readlines()
+            #print('raw_g',lines1)
+            g.close()
+            return lines1
+
+        def room_temp():
+            lines1 = read_temp_raw1()
+            while lines1[1].strip()[-3:] != 'YES':
+                lines1 = read_temp_raw1()
+                equals_pos1 = lines1[1].find('t=')
+                temp_string1 = lines1[1][equals_pos1 +2:]
+                temp_c1 = float(temp_string1) / 1000.0
+                return temp_c1
+
+        return room_temp()
+
+@blynk.on("V10")
+def v10_write_handler():
+    #water_status = v1_write_handler()
+    if v1_write_handler() <= 24:
+        return 0
+    elif v1_write_handler() >= 28:
+        return 2
+    else:
+        return 1
+
 while True:
-    try:
-        room_temp()
-        water_temp()
-    except:
-        logging.info('Interrupted')
+        blynk.run()
+        time.sleep(.5)
+        blynk.virtual_write(1, v1_write_handler())
+        blynk.virtual_write(2, v2_write_handler())
+        blynk.virtual_write(10, v10_write_handler())
