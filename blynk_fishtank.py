@@ -1,11 +1,15 @@
 #work on ALARM, FEED, CLEAN
+#work on camera
 
 import BlynkLib
 import os
 import glob
 import time
+import threading
+import datetime
 from sense_hat import SenseHat
 from datetime import datetime
+from picamera import PiCamera
 
 from threading import Thread
 from threading import Event
@@ -18,10 +22,18 @@ blynk = BlynkLib.Blynk(BLYNK_AUTH)
 
 now = datetime.now()
 sense = SenseHat()
+camera = PiCamera()
+frame = 1
+camera.start_preview()
+sense.set_imu_config(True, True, True)
 sense.clear()
+
+
 red = (255,0,0)
 blue = (0,0,255)
 green = (0,255,0)
+
+
 
 global base_dir
 base_dir = '/sys/bus/w1/devices/'
@@ -29,8 +41,6 @@ device_folder = glob.glob(base_dir + '28*')[0]
 device_folder1 = glob.glob(base_dir + '28*')[1]
 device_file = device_folder + '/w1_slave'
 device_file1 = device_folder1 + '/w1_slave'
-
-#Alarm Button
 
 
 #Water Temperature
@@ -97,7 +107,8 @@ def alarm_triggered():
     orientation = sense.get_orientation_degrees()
     print("p: {pitch}, r: {roll}, y: {yaw}".format(**orientation))
 
-    if orientation['pitch'] <=180:
+    if orientation['pitch'] <=180 and orientation ['pitch'] >=90:
+        #print("Alarm activated")
         return 1
     else:
         return 0
@@ -107,10 +118,11 @@ def alarm_button(value):
     buttonValue=value[0]
     print(f'Alarm Switch: {buttonValue}')
     if buttonValue =="1":
-        sense.show_message("ARMED!", text_colour = red)
-
+        #sense.show_message("ARMED!", text_colour = red)
+        print("1")
     elif buttonValue =="0":
-        sense.show_message("DISARMED!", text_colour = green)
+        print("0")
+        #sense.show_message("DISARMED!", text_colour = green)
         
 #Water Status
 @blynk.on("V10")
@@ -136,4 +148,12 @@ while True:
         blynk.virtual_write(10, water_status())
         blynk.virtual_write(9, alarm_triggered())
         blynk.virtual_write(11, triggered_date())
-        print(alarm_triggered())
+
+        if alarm_triggered():
+            fileLoc = f'/home/pi/fishtank/images/frame{frame}.jpg' # set the location of image file and current time
+            dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+            camera.capture(fileLoc) # capture image and store in fileLoc
+            print("lid was moved- photo taken")
+            print(f'frame {frame} taken at {dt_string}') # print frame number to console
+            frame += 1
+
