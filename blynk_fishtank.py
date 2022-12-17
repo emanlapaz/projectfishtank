@@ -24,6 +24,7 @@ now = datetime.now()
 sense = SenseHat()
 camera = PiCamera()
 frame = 1
+global value
 camera.start_preview()
 sense.set_imu_config(True, True, True)
 sense.clear()
@@ -101,29 +102,69 @@ def ambient_temp():
 
         return room_temp()
 
-#Alarm Triggered
+"""#Alarm Triggered
 @blynk.on("V9")
 def alarm_triggered():
     orientation = sense.get_orientation_degrees()
+    pitchOrient = orientation['pitch']
     print("p: {pitch}, r: {roll}, y: {yaw}".format(**orientation))
-
-    if orientation['pitch'] <=180 and orientation ['pitch'] >=90:
-        #print("Alarm activated")
+    if pitchOrient <=90 and pitchOrient >30:
         return 1
     else:
         return 0
-
+"""
 @blynk.on("V0")
 def alarm_button(value):
+    blynk.virtual_write(0)
+    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     buttonValue=value[0]
-    print(f'Alarm Switch: {buttonValue}')
+    frame =1
     if buttonValue =="1":
+        print(f'Alarm Activated at {dt_string}')
+        while True:
         #sense.show_message("ARMED!", text_colour = red)
-        print("1")
+            
+            @blynk.on("V9")
+            def alarm_triggered():
+                    orientation = sense.get_orientation_degrees()
+                    pitchOrient = orientation['pitch']
+                    print("p: {pitch}, r: {roll}, y: {yaw}".format(**orientation))
+                    if pitchOrient <=90 and pitchOrient >30:
+                        return 1
+                    elif pitchOrient >91:
+                        return 0
+            blynk.virtual_write(9, alarm_triggered())
+
+            if alarm_triggered() == 1:
+                @blynk.on("V11")
+                def triggered_date():
+                        dtString = now.strftime("%d/%m/%Y %H:%M:%S")
+                        if alarm_triggered() == 1:
+                            return dtString
+                        elif alarm_triggered() == 0:
+                            pass
+                blynk.virtual_write(11, triggered_date())
+
+            if alarm_triggered() == 1:
+                fileLoc = f'/home/pi/fishtank/images/frame{frame}.jpg' # set the location of image file and current time
+                dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+                camera.capture(fileLoc) # capture image and store in fileLoc
+                print("lid was moved- photo taken")
+                print(f'frame {frame} taken at {dt_string}') # print frame number to console
+                frame += 1
+
+            elif alarm_triggered() == 0 and buttonValue == "0":
+                break
+
     elif buttonValue =="0":
-        print("0")
-        #sense.show_message("DISARMED!", text_colour = green)
-        
+        print(f'Alarm Deactivated at {dt_string}')
+        return
+                
+                
+                
+   
+    #sense.show_message("DISARMED!", text_colour = green)
+
 #Water Status
 @blynk.on("V10")
 def water_status():
@@ -134,26 +175,29 @@ def water_status():
             return 2
         else:
             return 1
-
+"""
 @blynk.on("V11")
 def triggered_date():
-        dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+        dtString = now.strftime("%d/%m/%Y %H:%M:%S")
         if alarm_triggered() == 1:
-            return  dt_string
-
+            return dtString
+        elif alarm_triggered() == 0:
+            pass
+"""
 while True:
         blynk.run()
         blynk.virtual_write(1, tank_temp())
         blynk.virtual_write(2, ambient_temp())
         blynk.virtual_write(10, water_status())
-        blynk.virtual_write(9, alarm_triggered())
-        blynk.virtual_write(11, triggered_date())
-
-        if alarm_triggered():
+        #blynk.virtual_write(9, alarm_triggered())
+        #blynk.virtual_write(11, triggered_date())
+"""
+        if alarm_triggered() == 1:
             fileLoc = f'/home/pi/fishtank/images/frame{frame}.jpg' # set the location of image file and current time
             dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
             camera.capture(fileLoc) # capture image and store in fileLoc
             print("lid was moved- photo taken")
             print(f'frame {frame} taken at {dt_string}') # print frame number to console
             frame += 1
+"""         
 
