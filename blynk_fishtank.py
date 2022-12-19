@@ -10,6 +10,10 @@ import datetime
 from sense_hat import SenseHat
 from datetime import datetime
 from picamera import PiCamera
+import firebase_admin
+from firebase_admin import credentials, firestore, storage, db
+import os
+import storeFileFB
 
 from threading import Thread
 from threading import Event
@@ -20,6 +24,7 @@ os.system('modprobe w1-therm')
 BLYNK_AUTH = 'D_mFZtGQutqMZJFeSFj9MDUb7IknvwqN'
 blynk = BlynkLib.Blynk(BLYNK_AUTH) 
 
+bucket = storage.bucket()
 now = datetime.now()
 sense = SenseHat()
 camera = PiCamera()
@@ -42,7 +47,6 @@ device_folder = glob.glob(base_dir + '28*')[0]
 device_folder1 = glob.glob(base_dir + '28*')[1]
 device_file = device_folder + '/w1_slave'
 device_file1 = device_folder1 + '/w1_slave'
-
 
 #Water Temperature
 @blynk.on("V1")
@@ -133,9 +137,11 @@ def lightSwitch(value):
     if buttonValue == "1":
         print(f'Light On at {dt_string}')
         sense.clear( 255, 255, 255 )
+        #sense.show_message("ARMED!", text_colour = red)
     elif buttonValue == "0":
         print(f'Light Off at {dt_string}')
         sense.clear()
+        #sense.show_message("DISARMED!", text_colour = green)
      
 @blynk.on("V11")
 def triggered_date():
@@ -151,10 +157,13 @@ def cameraCapture():
     camera.capture(fileLoc) # capture image and store in fileLoc
     print("lid was moved- photo taken")
     print(f'frame {frame} taken at {dt_string}') # print frame number to console
+    storeFileFB.store_file(fileLoc)
+    storeFileFB.push_db(fileLoc, dt_string)
+    print('Image stored and location pushed to db')
     sense.clear( 0, 0, 255 )
     time.sleep ( 0.5 )
     sense.clear( 255, 0, 0 )
-    
+
 
 while True:
     blynk.run()
@@ -169,3 +178,9 @@ while True:
         frame += 1
     elif alarm_triggered() == 0:
         sense.clear()
+          
+            
+                
+                
+
+
