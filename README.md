@@ -7,13 +7,19 @@ Project fishtank
 
 
 Student Name: Eugenio Manlapaz
+
 Student ID: 20100013
+
 Project Repo: https://github.com/emanlapaz/projectfishtank
+
 Glitch URL: https://angry-uttermost-gaura.glitch.me/
+
 Youtube Video Link: 
 
+
 Introduction:
-	Project fishtank is an IOT project using the Raspberry pi. Tropical aquarium fish needs a certain temperature range to be healthy and reproduce. Proper cycling of light and water is also very essential same as with the feeding schedule. The aim of this project is to use the Raspberry Pi to monitor activities such as feeding and cleaning, temperature (ambient and water temperature), and any unwanted events that could happen ( e.g. a toddler opening the lid and pouring all the feed inside the tank).
+
+Project fishtank is an IOT project using the Raspberry pi. Tropical aquarium fish needs a certain temperature range to be healthy and reproduce. Proper cycling of light and water is also very essential same as with the feeding schedule. The aim of this project is to use the Raspberry Pi to monitor activities such as feeding and cleaning, temperature (ambient and water temperature), and any unwanted events that could happen ( e.g. a toddler opening the lid and pouring all the feed inside the tank).
  
 Materials:
 1.	Raspberry pi
