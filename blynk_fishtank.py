@@ -14,6 +14,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore, storage, db
 import os
 import storeFileFB
+from BlynkTimer import BlynkTimer
 
 from threading import Thread
 from threading import Event
@@ -29,6 +30,7 @@ now = datetime.now()
 sense = SenseHat()
 camera = PiCamera()
 frame = 1
+timer = BlynkTimer()
 global value
 camera.start_preview()
 sense.set_imu_config(True, True, True)
@@ -78,7 +80,7 @@ def tank_temp():
 
         return water_temp()
 
-#Room Temperature       
+#Room Temperature
 @blynk.on("V2")
 def ambient_temp():
 
@@ -111,11 +113,30 @@ def ambient_temp():
 def water_status():
     water_temp = tank_temp()
     if water_temp <= 24:
+        blynk.log_event("tank_temp_low")
         return 0
     elif water_temp >= 28:
+        blynk.log_event("tank_temp_high")
         return 2
     else:
         return 1
+
+
+#Room Status
+@blynk.on("V13")
+def room_status():
+    
+    room_temp = ambient_temp()
+    if room_temp <= 18:
+        blynk.log_event("room_temp_low")
+        return 0
+    elif room_temp >= 24:
+        blynk.log_event("room_temp_high")
+        return 2
+    else:
+        return 1
+
+    
 
 #Alarm Triggered
 @blynk.on("V9")
@@ -123,8 +144,9 @@ def alarm_triggered():
     orientation = sense.get_orientation_degrees()
     pitchOrient = orientation['pitch']
     print("p: {pitch}, r: {roll}, y: {yaw}".format(**orientation))
-    if pitchOrient <=90 and pitchOrient >30:
-    #if pitchOrient <=350:
+    #if pitchOrient <=90 and pitchOrient >30:
+    if pitchOrient <350 and pitchOrient >=10:
+        blynk.log_event("lid_moved")
         return 1
     else:
         return 0
@@ -161,15 +183,24 @@ def cameraCapture():
     storeFileFB.push_db(fileLoc, dt_string)
     print('Image stored and location pushed to db')
     sense.clear( 0, 0, 255 )
-    time.sleep ( 0.5 )
+    time.sleep ( 0.33 )
+    sense.clear( 255, 0, 0 )
+    sense.clear( 0, 0, 255 )
+    time.sleep ( 0.33 )
     sense.clear( 255, 0, 0 )
 
+#timers
+timer.set_interval(30, tank_temp)
+timer.set_interval(30, ambient_temp)
+timer.set_interval(30, water_status)
 
 while True:
     blynk.run()
+    timer.run()
     blynk.virtual_write(1, tank_temp())
     blynk.virtual_write(2, ambient_temp())
     blynk.virtual_write(10, water_status())
+    blynk.virtual_write(13, room_status())
     blynk.virtual_write(9, alarm_triggered())
     blynk.virtual_write(11, triggered_date())
 
