@@ -4,7 +4,7 @@ Project fishtank
 Student Name: Eugenio Manlapaz
 Student ID: 20100013
 Project Repo: https://github.com/emanlapaz/projectfishtank
-Glitch URL:
+Glitch URL: https://angry-uttermost-gaura.glitch.me/
 Youtube Video Link: 
 
 Introduction:
