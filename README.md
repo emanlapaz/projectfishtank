@@ -1,6 +1,7 @@
 # projectfishtank image
 # edit and finalize
 Project fishtank
+![Alt Text](projectfishtank\images\RiAB9Xk6T.jpg?raw=true "Project fishtank")
 Student Name: Eugenio Manlapaz
 Student ID: 20100013
 Project Repo: https://github.com/emanlapaz/projectfishtank
