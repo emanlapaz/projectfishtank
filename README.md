@@ -114,25 +114,49 @@ Whenever the Lid is moved, the Sensehat LED lights up Red and Blue and the PiCam
 
 <img src="https://user-images.githubusercontent.com/96552779/208764066-b35ef9dc-fc74-44ac-a3c3-38adf36ce19d.gif" width=50% height=50%>
 
-BLYNK WEB DASHBOARD:
-Web Dashboard
+
+
+BLYNK:
+
+Web Dashboard:
+
 <img src="https://github.com/emanlapaz/projectfishtank/blob/main/images/blynkDash.png" width=50% height=50%>
 
-DataStream
+
+On my web dashboard, I have 3 sets of buttons for the Light, Feed and Clean Switches. The LED widgets will light up corresponding to the switches toggled.
+
+I also have Line Charts for the Water and Room Sensors and Bar charts to log in the Alarm Triggered function, Feed Log and the Cleaning Log. I have label widgets to show the date and time of the recent alarm trigger and labels showing the room and water status.
+
+#Feed/CLeaning due widgets???
+
+Aside from the web dashboard, I also have a Blynk mobile app with the Swtiches and Charts. If a Blynk Event is Triggered, I will receive a push notification on my mobile phone. A critical event will sound an Alarm.
+
+DataStreams
+
 <img src="https://github.com/emanlapaz/projectfishtank/blob/main/images/datastreams.png" width=50% height=50%>
 
 Events
+
+
 <img src="https://github.com/emanlapaz/projectfishtank/blob/main/images/events.png" width=50% height=50%>
 
 
 BLYNK MOBILE APP:
 Mobile App DashBoard
-<img src="https://github.com/emanlapaz/projectfishtank/blob/main/images/mobileapp2.png" width=33% height=50%>
-<img src="https://github.com/emanlapaz/projectfishtank/blob/main/images/mobileapp1.png" width=33% height=50%>
-<img src="https://github.com/emanlapaz/projectfishtank/blob/main/images/mobileapp3.png" width=33% height=50%>
+<img src="https://github.com/emanlapaz/projectfishtank/blob/main/images/mobileapp2.png" width=33% height=33%>
+
+
+<img src="https://github.com/emanlapaz/projectfishtank/blob/main/images/mobileapp1.png" width=33% height=33%>
+
+
+<img src="https://github.com/emanlapaz/projectfishtank/blob/main/images/mobileapp3.png" width=33% height=33%>
 
 
 FIREBASEDB:
+
+Images captured during the alarm triggered event will be push and stored to the FirebaseDB
+
+
 <img src="https://github.com/emanlapaz/projectfishtank/blob/main/images/firebaseDB.png" width=50% height=50%>
 
 
