@@ -146,16 +146,22 @@ Mobile App DashBoard
 
 
 Mobile app switches
+
+
 <img src="https://github.com/emanlapaz/projectfishtank/blob/main/images/mobileapp1.png" width=33% height=33%>
 
 
 
 Mobile app charts
+
+
 <img src="https://github.com/emanlapaz/projectfishtank/blob/main/images/mobileapp2.png" width=33% height=33%>
 
 
 
 Mobile app Notifications
+
+
 <img src="https://github.com/emanlapaz/projectfishtank/blob/main/images/mobileapp3.png" width=33% height=33%>
 
 
