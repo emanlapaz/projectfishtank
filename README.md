@@ -101,8 +101,9 @@ I used a breakout board and connected 2 D18B20 sensors on parallel connection. I
 
 One DS18B20 temperature sensor goes inside the Fish tank to measure the Water Temperature and another DS18B20 temperature sensor placed outside the tank to measure the ambient temperature(Room temp). Initially I was planning on using the SenseHat temperature sensor to measure the room temperature but the sensor picks up the heat from the SenseHat and thus returning high temperature readings.
 
-The DS18B20 temperature sensors are connected on one breakout board. This is possible using the One- Wire interface.
-The DS18B20 sensor has 3 coloured wires. Red for power(VCC), Yellow for data, and Black for ground. The breakout board that came with the sensors has labels on it (VCC, data, ground). I used a female to female jumper wires to connect the breakout board to the RPi pins. The VCC is connected to the 3V3 (pin 1), the data wire to the GPIO4 (pin 7) and ground wire to ground(pin 7)
+The DS18B20 temperature sensors are connected on one breakout board. This is possible using the One- Wire interface. One-Wire is a device communications bus system designed by Dallas Semiconductor Corp. that provides low-speed (16.3 kbit/s[1]) data, signaling, and power over a single conductor.
+
+The DS18B20 sensor has 3 coloured wires. Red for power(VCC), Yellow for data, and Black for ground. The breakout board that came with the sensors has labels on it (VCC, data, ground). I used a female to female jumper wires to connect the breakout board to the RPi pins. The VCC is connected to the 3V3 (pin 1), the data wire to the GPIO4- I2C (pin 7) and ground wire to ground(pin 7). Please note that the One Wire interfaces needs and I2C pin.
 
 I also used a PiCamera attachement and positioned it upright to capture an image whenever the lid is moved. The images from the PiCamera is then pushed to the FirebaseDB and then to the Glitch app.
 
@@ -116,8 +117,13 @@ BLYNK WEB DASHBOARD:
 #add screenshots, dash, evemts, datastreams
 BLYNK MOBILE APP:
 #add mobile screen shots
-REFERENCES:
+
+REFERENCES/SOURCES:
 
 https://www.hackster.io/vinayyn/multiple-ds18b20-temp-sensors-interfacing-with-raspberry-pi-d8a6b0
 
 https://pinout.xyz/
+
+https://www.alamy.com/fish-tank-cartoon-image246642635.html
+
+https://en.wikipedia.org/wiki/1-Wire
