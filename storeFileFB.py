@@ -4,8 +4,8 @@ import os
 
 cred=credentials.Certificate('serviceAccountKey.json')
 firebase_admin.initialize_app(cred, {
-    'storageBucket': 'fishtank-80882.appspot.com', # REPLACE WITH YOUR BUCKET ID
-    'databaseURL': 'https://fishtank-80882-default-rtdb.europe-west1.firebasedatabase.app'
+    'storageBucket': 'fishtank-80882.appspot.com', #YOUR BUCKET ID
+    'databaseURL': 'https://fishtank-80882-default-rtdb.europe-west1.firebasedatabase.app' #Firebase database URL
 })
 bucket = storage.bucket()
 
