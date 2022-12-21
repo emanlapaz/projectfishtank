@@ -16,7 +16,7 @@ Glitch URL: https://angry-uttermost-gaura.glitch.me/
 Youtube Video Link: 
 
 
-Introduction:
+INTRODUCTION:
 
 Project fishtank is an IOT project using the Raspberry pi. Tropical aquarium fish needs a certain temperature range to be healthy and reproduce. Proper cycling of light and water is also very essential same as with the feeding schedule. The aim of this project is to use the Raspberry Pi to monitor activities such as feeding and cleaning, temperature (ambient and water temperature), and any unwanted events that could happen ( e.g. a toddler opening the lid and pouring all the feed inside the tank).
  
@@ -24,7 +24,7 @@ Project fishtank is an IOT project using the Raspberry pi. Tropical aquarium fis
  <img src="https://user-images.githubusercontent.com/96552779/208762335-36238a13-1587-444e-b57f-d73847afb687.gif" width=50% height=50%>
  
  
-Materials:
+MATERIALS:
 1.	Raspberry pi
 <img src="https://user-images.githubusercontent.com/96552779/208762854-578c98fb-3f9d-4e1a-86b8-6a0f2b37da93.jpg" width=50% height=50%>
 
@@ -46,50 +46,78 @@ Materials:
 
 6. 40 pin header extension
 
-Tech:
+TECH USED:
 1.	Wi-Fi
+
 2.	Blynk for buttons and charts
+
 3.	Blynk for Mobile app connection
+
 4.	FireBase
+
 5.	Glitch
+
 6.	Visual Code for SSH and Code editor
+
 7.	Python for programming language
 
-Functions:
+FUNCTIONS:
+
 1. Water temperature (Fish Tank Temp)
+
 2. Ambient temperature (Room Temp)
-3. Feed Timer
-4. Cleaning Timer
+
+3. Feed Monitor/ Logger
+
+4. Cleaning Monitor/ Logger
+
 5. Movement Detection using SenseHat Gyroscope
 
 Applications:
 1.	Monitors water temperature and room temperature.
+
 2.	Monitor feeding status via Blynk charts and Timers
 	#Sends notifications when feeding due or over due (Lights green rectangle when feed still okay, orange when 1 day passed, red when >3 days past)
+	
 3. 	Monitor cleaning status
 	#sends notifications when cleaning due, over due (Lights green smiley 😉, orange when 1 day passed 😐, red sad face when >3 days passed ☹)
+	
 4.	Motion Detection: Checks if lid is open/moved using the senseHat Gyroscope Pitch
-5.	Security alarm: If lid moved, captures an image and sends it to Firebase DB. Most Recent image can be viewed in the Glitch URL:
-6.	#live streaming via Blink video
-7.	SenseHat LED matrix as light source
 
-Raspberry Pi Set Up:
+5.	Security alarm: If lid moved, captures an image and sends it to Firebase DB. 
+	Most Recent image can be viewed in the Glitch URL: https://angry-uttermost-gaura.glitch.me/
 
-I am using a Raspberry Pi 4B 2gb with a 40 pin header extension to attach the SenseHat and the D18B20 temperature sensor. 
-#RPi
-#2 way 40 pin header extension. The 2 way header extension enables me to attach the SenseHat and use the Pins for other attachments. I used a breakout board and connected 2 D18B20 sensors(parallel connection). The One Wire ### allows parallel connections with multiple D18B20 sensors. Pins used are the 3V, ##, ##
-#D18B20 temperature sensor
+6.	SenseHat LED matrix as light source
 
-#RPi on tank set up
-dark
+RASPBERRY Pi SET UP:
 
 <img src="https://user-images.githubusercontent.com/96552779/208763693-07f04aaf-10fb-4413-afcb-643c6e606d75.jpg" width=50% height=50%>
-light
+
+I am using a Raspberry Pi 4B 2gb which is attached on the Fish Tank's Lid.
+
+I then attached a 2 way 40 pin extension header and connected both SenseHat and the Pins for the D18B20 Temperature sensors.
+
+I used a breakout board and connected 2 D18B20 sensors on parallel connection. I opted not to use the breadboard and the resistors as they might be moved out of place whenever the fish tank lid is opened.
+
+One DS18B20 temperature sensor goes inside the Fish tank to measure the Water Temperature and another DS18B20 temperature sensor placed outside the tank to measure the ambient temperature(Room temp). Initially I was planning on using the SenseHat temperature sensor to measure the room temperature but the sensor picks up the heat from the SenseHat and thus returning high temperature readings.
+
+The DS18B20 temperature sensors are connected on one breakout board. This is possible using the One- Wire interface.
+The DS18B20 sensor has 3 coloured wires. Red for power(VCC), Yellow for data, and Black for ground. The breakout board that came with the sensors has labels on it (VCC, data, ground). I used a female to female jumper wires to connect the breakout board to the RPi pins. The VCC is connected to the 3V3 (pin 1), the data wire to the GPIO4 (pin 7) and ground wire to ground(pin 7)
+
+I also used a PiCamera attachement and positioned it upright to capture an image whenever the lid is moved. The images from the PiCamera is then pushed to the FirebaseDB and then to the Glitch app.
 
 <img src="https://user-images.githubusercontent.com/96552779/208764204-af776fb5-43e8-4e23-b499-2b8c831a3899.jpg" width=50% height=50%>
 
-Lid Moved
+Whenever the Lid is moved, the Sensehat LED lights up Red and Blue and the PiCamera is activated to capture an Image. I used the SenseHat gyroscope's Pitch degrees readings to detect if the lid was moved. The Red/Blue lights and image capture will stop when the lid is closed(Flat position)
 
 <img src="https://user-images.githubusercontent.com/96552779/208764066-b35ef9dc-fc74-44ac-a3c3-38adf36ce19d.gif" width=50% height=50%>
 
+BLYNK WEB DASHBOARD:
+#add screenshots, dash, evemts, datastreams
+BLYNK MOBILE APP:
+#add mobile screen shots
 REFERENCES:
+
+https://www.hackster.io/vinayyn/multiple-ds18b20-temp-sensors-interfacing-with-raspberry-pi-d8a6b0
+
+https://pinout.xyz/
