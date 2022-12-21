@@ -1,6 +1,3 @@
-#work on ALARM, FEED, CLEAN
-#work on camera
-
 import BlynkLib
 import os
 import glob
@@ -31,12 +28,12 @@ sense = SenseHat()
 camera = PiCamera()
 frame = 1
 timer = BlynkTimer()
-global value
+
 camera.start_preview()
-sense.set_imu_config(True, True, True)
-sense.clear()
+sense.set_imu_config(True, True, True) #sets the gyroscope, magnetometer and acceloremeter on
+sense.clear() #clears the Rpi
 
-
+#colours
 red = (255,0,0)
 blue = (0,0,255)
 green = (0,255,0)
@@ -50,7 +47,7 @@ device_folder1 = glob.glob(base_dir + '28*')[1]
 device_file = device_folder + '/w1_slave'
 device_file1 = device_folder1 + '/w1_slave'
 
-#Water Temperature
+#Water Temperature (FishTank) measurement using the DS18B20 temperature sensor
 @blynk.on("V1")
 def tank_temp():
 
@@ -80,7 +77,7 @@ def tank_temp():
 
         return water_temp()
 
-#Room Temperature
+#Room Temperature measurement using the DS18B20 temperature sensor
 @blynk.on("V2")
 def ambient_temp():
 
@@ -108,7 +105,7 @@ def ambient_temp():
 
         return room_temp()
 
-#Water Status
+#Water Status - triggers Blynk events
 @blynk.on("V10")
 def water_status():
     water_temp = tank_temp()
@@ -122,10 +119,9 @@ def water_status():
         return 1
 
 
-#Room Status
+#Room Status- triggers Blynk events
 @blynk.on("V13")
 def room_status():
-    
     room_temp = ambient_temp()
     if room_temp <= 18:
         blynk.log_event("room_temp_low")
@@ -138,19 +134,19 @@ def room_status():
 
     
 
-#Alarm Triggered
+#Alarm Function- uses the Sensehat Gyroscope pitch readings to detect movement. Activates when pitch is in between 30 to 90 degrees
 @blynk.on("V9")
 def alarm_triggered():
     orientation = sense.get_orientation_degrees()
     pitchOrient = orientation['pitch']
     print("p: {pitch}, r: {roll}, y: {yaw}".format(**orientation))
-    #if pitchOrient <=90 and pitchOrient >30:
-    if pitchOrient <350 and pitchOrient >=10:
+    if pitchOrient <=90 and pitchOrient >30:
         blynk.log_event("lid_moved")
         return 1
     else:
         return 0
 
+#light switch- lights up the SenseHat LED
 @blynk.on("V0")
 def lightSwitch(value):
     blynk.virtual_write(0)
@@ -159,12 +155,12 @@ def lightSwitch(value):
     if buttonValue == "1":
         print(f'Light On at {dt_string}')
         sense.clear( 255, 255, 255 )
-        #sense.show_message("ARMED!", text_colour = red)
     elif buttonValue == "0":
         print(f'Light Off at {dt_string}')
         sense.clear()
-        #sense.show_message("DISARMED!", text_colour = green)
-     
+        
+ 
+#returns date and time whenever the alarm is triggered
 @blynk.on("V11")
 def triggered_date():
     dtString = now.strftime("%d/%m/%Y %H:%M:%S")
@@ -173,6 +169,7 @@ def triggered_date():
     elif alarm_triggered() == 0:
         pass
 
+#PiCamera function
 def cameraCapture():
     fileLoc = f'/home/pi/fishtank/images/frame{frame}.jpg' # set the location of image file and current time
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
@@ -182,6 +179,7 @@ def cameraCapture():
     storeFileFB.store_file(fileLoc)
     storeFileFB.push_db(fileLoc, dt_string)
     print('Image stored and location pushed to db')
+    #lights up the LED Red/Blue (Warnin light)
     sense.clear( 0, 0, 255 )
     time.sleep ( 0.33 )
     sense.clear( 255, 0, 0 )
@@ -189,14 +187,16 @@ def cameraCapture():
     time.sleep ( 0.33 )
     sense.clear( 255, 0, 0 )
 
-#timers
+#Blynk timers- returns readings to the BlynK Server at a 30 seconds interval
 timer.set_interval(30, tank_temp)
 timer.set_interval(30, ambient_temp)
 timer.set_interval(30, water_status)
+timer.set_interval(30, room_status)
 
 while True:
     blynk.run()
     timer.run()
+   #DataStreams
     blynk.virtual_write(1, tank_temp())
     blynk.virtual_write(2, ambient_temp())
     blynk.virtual_write(10, water_status())
