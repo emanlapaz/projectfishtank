@@ -27,7 +27,7 @@ INTRODUCTION:
 Project fishtank is an IOT project using the Raspberry pi. Tropical aquarium fish needs a certain temperature range to be healthy and reproduce. Proper cycling of light and water is also very essential same as with the feeding schedule. The aim of this project is to use the Raspberry Pi to monitor activities such as feeding and cleaning, temperature (ambient and water temperature), and any unwanted events that could happen ( e.g. a toddler opening the lid and pouring all the feed inside the tank).
  
  
- <img src="https://user-images.githubusercontent.com/96552779/208762335-36238a13-1587-444e-b57f-d73847afb687.gif" width=80% height=80% align=centre>
+ <img src="https://user-images.githubusercontent.com/96552779/208762335-36238a13-1587-444e-b57f-d73847afb687.gif" width=50% height=50% >
  
  
 MATERIALS:
