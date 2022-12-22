@@ -126,7 +126,7 @@ BLYNK:
 
 Web Dashboard:
 
-<img src="https://github.com/emanlapaz/projectfishtank/blob/main/images/blynkDash.png" width=50% height=50%>
+<img src="https://github.com/emanlapaz/projectfishtank/blob/main/images/new_dash.png" width=50% height=50%>
 
 
 On my web dashboard, I have 3 sets of buttons for the Light, Feed and Clean Switches. The LED widgets will light up corresponding to the switches toggled.
