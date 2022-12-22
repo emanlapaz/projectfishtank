@@ -185,6 +185,7 @@ TO DOS/ IMPROVEMENTS:
 1. Use a motion sensor instead of the sensehat gyroscope
 2. Try threading if it works
 3. Add feed/cleaning due timers
+4. Display multiple captured images on the Glitch APP
 
 
 REFERENCES/SOURCES:
