@@ -179,6 +179,14 @@ Images captured during the alarm triggered event will be push and stored to the 
 <img src="https://github.com/emanlapaz/projectfishtank/blob/main/images/firebaseDB.png" width=50% height=50%>
 
 
+
+GLITCH:
+
+The Glitch website displays the most recent images taken.
+
+<img src="https://github.com/emanlapaz/projectfishtank/blob/main/images/firebaseDB.png" width=50% height=50%>
+
+
 ISSUES/BUGS:
 The SenseHat plus the temperature sensor slows down the return values. I might have been overloading the RPi processor with my current set up. The SenseHat gyroscope returns multiple values per second, any changes in orientation will be reflected in realtime if the sensehat is running on its own. Adding the temperature readings from the DS18B20 sensors slows down the gyroscope readings drastically and the gyroscope readings will try to catch up. Adding additional functions will further slow down the gyroscope readings. I was planning to toggle on/off the gyroscope readings(which triggers my ALARM event) but unfortunately I was not quite successful. Instead, I added a Countdown timer function to override(hold) the gyroscope readings thus preventing the ALARM function to be triggered. This work around is functional but not very efficient.
 
