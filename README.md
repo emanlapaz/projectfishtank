@@ -184,7 +184,7 @@ GLITCH:
 
 The Glitch website displays the most recent images taken.
 
-<img src="https://github.com/emanlapaz/projectfishtank/blob/main/images/firebaseDB.png" width=50% height=50%>
+<img src="https://github.com/emanlapaz/projectfishtank/blob/main/images/monkey.png" width=50% height=50%>
 
 
 ISSUES/BUGS:
