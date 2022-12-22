@@ -32,14 +32,51 @@ camera = PiCamera()
 frame = 1
 global value
 camera.start_preview()
-sense.set_imu_config(True, True, True)
+sense.set_imu_config(False, True, False) #gyroscope only
 sense.clear()
 
 
 red = (255,0,0)
 blue = (0,0,255)
 green = (0,255,0)
+orange = (255,127,0)
+R = (255, 0, 0)
+W = (0, 0, 0)
+G = (0,255,0)
+O = (255,127,0)
 
+red_face = [
+     W, W, R, R, R, R, W, W,
+     W, R, W, W, W, W, R, W,
+     R, W, R, W, W, R, W, R,
+     R, W, W, W, W, W, W, R,
+     R, W, W, R, R, W, W, R,
+     R, W, R, W, W, R, W, R,
+     W, R, W, W, W, W, R, W,
+     W, W, R, R, R, R, W, W
+]
+
+green_face = [
+     W, W, G, G, G, G, W, W,
+     W, G, W, W, W, W, G, W,
+     G, W, G, W, W, G, W, G,
+     G, W, W, W, W, W, W, G,
+     G, W, G, W, W, G, W, G,
+     G, W, W, G, G, W, W, G,
+     W, G, W, W, W, W, G, W,
+     W, W, G, G, G, G, W, W
+]
+
+orange_face = [
+     W, W, O, O, O, O, W, W,
+     W, O, W, W, W, W, O, W,
+     O, W, O, W, W, O, W, O,
+     O, W, W, W, W, W, W, O,
+     O, W, O, W, W, O, W, O,
+     O, W, W, O, O, W, W, O,
+     W, O, W, W, W, W, O, W,
+     W, W, O, O, O, O, W, W
+]
 
 
 global base_dir
@@ -141,7 +178,7 @@ def room_status():
 def alarm_triggered():
     orientation = sense.get_orientation_degrees()
     pitchOrient = orientation['pitch']
-    print("p: {pitch}, r: {roll}, y: {yaw}".format(**orientation))
+    print("p: {pitch}".format(**orientation))
     #if pitchOrient <=90 and pitchOrient >30:
     if pitchOrient <350 and pitchOrient >=10:
         blynk.log_event("lid_moved")
@@ -155,17 +192,14 @@ def lightSwitch(value):
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     buttonValue=value[0]
     if buttonValue == "1":
-        print(f'Light On at {dt_string}')
-        sense.clear( 255, 0, 0 )
-        sense.clear( 0, 255, 0 )
+        sense.clear( 255, 255, 255 )
     elif buttonValue == "0":
-        print(f'Light Off at {dt_string}')
         sense.clear()
 
 
-feed_timer = 5
+feed_timer =10
 def feed_countdown(feed_timer):
-    blynk.virtual_write(5, "Alarm Deactivated: Feed Now")
+    blynk.virtual_write(5, "Feed Now")
     while feed_timer:
         mins, secs = divmod(feed_timer, 60)
         hours, mins = divmod(mins, 60)
@@ -182,12 +216,14 @@ def feedSwitch(value):
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     buttonValue=value[0]
     if buttonValue == "1":
-        sense.clear( 0, 255, 0 )
+        sense.show_message("Feed Now!", text_colour = orange)
+        sense.set_pixels(orange_face)      
         time.sleep(1)
         feed_countdown(feed_timer)
         if buttonValue == "1":
             blynk.virtual_write(3, 0)
-            sense.clear( 255, 0, 0 )
+            sense.show_message("ALARM ON!", text_colour = red)
+            sense.set_pixels(red_face)
             blynk.virtual_write(5, "Alarm Activated: Dont Feed")
         return 1
 
@@ -197,7 +233,7 @@ def feedSwitch(value):
 
 clean_timer= 10
 def clean_countdown(clean_timer):
-    blynk.virtual_write(8, "Alarm Deactivated: Clean Now")
+    blynk.virtual_write(8, "Clean Now!")
     while clean_timer:
         mins, secs = divmod(clean_timer, 60)
         hours, mins = divmod(mins, 60)
@@ -211,18 +247,15 @@ def clean_countdown(clean_timer):
 @blynk.on("V4")
 def clean_Switch(value):
     blynk.virtual_write(4)
-    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     buttonValue=value[0]
     if buttonValue == "1":
-        sense.clear( 255, 0, 0 )
-        time.sleep(3)
-        sense.clear( 0, 255, 0 )
-        time.sleep(3)
         sense.show_message("Clean Now!", text_colour = green)
+        sense.set_pixels(green_face)
         clean_countdown(clean_timer)
         if buttonValue == "1":
             blynk.virtual_write(4, 0)
-            sense.clear( 255, 0, 0 )
+            sense.show_message("ALARM ON!", text_colour = red)
+            sense.set_pixels(red_face)
             blynk.virtual_write(8, "Alarm Activated: Dont Clean")
         return 1
         
