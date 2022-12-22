@@ -83,11 +83,9 @@ FUNCTIONS:
 Applications:
 1.	Monitors water temperature and room temperature.
 
-2.	Monitor feeding status via Blynk charts and Timers
-	#Sends notifications when feeding due or over due (Lights green rectangle when feed still okay, orange when 1 day passed, red when >3 days past)
+2.	Monitor feeding status via Blynk charts
 	
-3. 	Monitor cleaning status
-	#sends notifications when cleaning due, over due (Lights green smiley 😉, orange when 1 day passed 😐, red sad face when >3 days passed ☹)
+3. 	Monitor cleaning status using charts
 	
 4.	Motion Detection: Checks if lid is open/moved using the senseHat Gyroscope Pitch
 
