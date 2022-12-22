@@ -74,11 +74,11 @@ FUNCTIONS:
 
 2. Ambient temperature (Room Temp)
 
-3. Feed Monitor/ Logger
+3. Feed Monitor/ Logger. Video link: https://youtu.be/AAjUQZmRiLY
 
-4. Cleaning Monitor/ Logger
+4. Cleaning Monitor/ Logger. Video link: https://youtu.be/q87TbEKqARE
 
-5. Alarm/Movement Detection using SenseHat Gyroscope video link: https://youtube.com/shorts/WokquJIVTvg
+5. Alarm/Movement Detection using SenseHat Gyroscope. Video link: https://youtube.com/shorts/WokquJIVTvg
 
 Applications:
 1.	Monitors water temperature and room temperature.
