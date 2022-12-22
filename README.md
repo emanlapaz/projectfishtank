@@ -18,7 +18,7 @@ Youtube Video Link:
 PROJECT INFOGRAPHIC:
 
 
-<img src="https://github.com/emanlapaz/projectfishtank/blob/main/images/Fishtank%20slide%20pic.jpg" width=50% height=50%>
+<img src="https://github.com/emanlapaz/projectfishtank/blob/main/images/Fishtank%20slide%20pic.jpg" width=80% height=80%>
 
 
 
