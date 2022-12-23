@@ -131,7 +131,6 @@ On my web dashboard, I have 3 sets of buttons for the Light, Feed and Clean Swit
 
 I also have Line Charts for the Water and Room Sensors and Bar charts to log in the Alarm Triggered function, Feed Log and the Cleaning Log. I have label widgets to show the date and time of the recent alarm trigger and labels showing the room and water status.
 
-#Feed/CLeaning due widgets???
 
 Aside from the web dashboard, I also have a Blynk mobile app with the Swtiches and Charts. If a Blynk Event is Triggered, I will receive a push notification on my mobile phone. A critical event will sound an Alarm.
 
@@ -186,12 +185,16 @@ The Glitch website displays the most recent images taken.
 
 
 ISSUES/BUGS:
-The SenseHat plus the temperature sensor slows down the return values. I might have been overloading the RPi processor with my current set up. The SenseHat gyroscope returns multiple values per second, any changes in orientation will be reflected in realtime if the sensehat is running on its own. Adding the temperature readings from the DS18B20 sensors slows down the gyroscope readings drastically and the gyroscope readings will try to catch up. Adding additional functions will further slow down the gyroscope readings. I was planning to toggle on/off the gyroscope readings(which triggers my ALARM event) but unfortunately I was not quite successful. Instead, I added a Countdown timer function to override(hold) the gyroscope readings thus preventing the ALARM function to be triggered. This work around is functional but not very efficient.
+The SenseHat plus the temperature sensor slows down the return values. I might have been overloading the RPi processor with my current set up. The SenseHat gyroscope returns multiple values per second, any changes in orientation will be reflected in realtime if the sensehat is running on its own.
+
+Adding the temperature readings from the DS18B20 sensors slows down the gyroscope readings drastically and the gyroscope readings will try to catch up. Adding additional functions will further slow down the gyroscope readings.
+
+I was planning to toggle on/off the gyroscope readings(which triggers my ALARM event) but unfortunately I was not quite successful. Instead, I added a Countdown timer function to override(hold) the gyroscope readings thus preventing the ALARM function to be triggered. This work around is functional but not very efficient.
 
 TO DOS/ IMPROVEMENTS:
 1. Use a motion sensor instead of the sensehat gyroscope
 2. Try threading if it works
-3. Add feed/cleaning due timers
+3. Add feed/cleaning due timers- notifies when feed/cleaning due
 4. Display multiple captured images on the Glitch APP
 
 
