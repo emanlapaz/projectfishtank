@@ -13,7 +13,7 @@ Project Repo: https://github.com/emanlapaz/projectfishtank
 
 Glitch URL: https://angry-uttermost-gaura.glitch.me/
 
-Youtube Video Link: 
+Youtube Video Link: https://youtu.be/fqZVge_55nU
 
 PROJECT INFOGRAPHIC:
 
@@ -74,11 +74,17 @@ FUNCTIONS:
 
 2. Ambient temperature (Room Temp)
 
-3. Feed Monitor/ Logger. Video link: https://youtu.be/AAjUQZmRiLY
+3. Feed Monitor/ Logger. When the feed switch from the Blynk dash is turned on, logs the date and time on the charts. This will turn off the Alarm funtion and gives a prompt whenever the alarm is deactivated. The sensehat LED will show a message and displays a smiley. A countdown will start on the background. When the timer is done, will turn off the feed switch and activate the alarm function, displays a message and a sad face on the sensehat LED.
 
-4. Cleaning Monitor/ Logger. Video link: https://youtu.be/q87TbEKqARE
+	Video link: https://youtu.be/AAjUQZmRiLY
 
-5. Alarm/Movement Detection using SenseHat Gyroscope. Video link: https://youtube.com/shorts/WokquJIVTvg
+4. Cleaning Monitor/ Logger. When the clean switch from the Blynk dash is turned on, logs the date and time on the charts. This will turn off the Alarm funtion and gives a prompt whenever the alarm is deactivated. The sensehat LED will show a message and displays a smiley. A countdown will start on the background. When the timer is done, will turn off the clean switch and activate the alarm function, displays a message and a sad face on the sensehat LED.
+
+	Video link: https://youtu.be/q87TbEKqARE
+
+5. Alarm/Movement Detection using SenseHat Gyroscope. When the Fish Tank lid is tilted (pitch up) activates the alarm, flashes led lights and starts capturing images until the lid is placed on a flat position. 
+
+	Video link: https://youtube.com/shorts/WokquJIVTvg
 
 Applications:
 1.	Monitors water temperature and room temperature.
