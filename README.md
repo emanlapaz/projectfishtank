@@ -106,7 +106,7 @@ I used a breakout board and connected 2 D18B20 sensors on parallel connection. I
 
 One DS18B20 temperature sensor goes inside the Fish tank to measure the Water Temperature and another DS18B20 temperature sensor placed outside the tank to measure the ambient temperature(Room temp). Initially I was planning on using the SenseHat temperature sensor to measure the room temperature but the sensor picks up the heat from the SenseHat and thus returning high temperature readings.
 
-The DS18B20 temperature sensors are connected on one breakout board. This is possible using the One- Wire interface. One-Wire is a device communications bus system designed by Dallas Semiconductor Corp. that provides low-speed (16.3 kbit/s[1]) data, signaling, and power over a single conductor.
+The DS18B20 temperature sensors are connected on one breakout board. This is possible using the One- Wire interface. One-Wire is a device communications bus system designed by Dallas Semiconductor Corp. that provides low-speed (16.3 kbit/s[1]) data, signaling, and power over a single conductor. (Wikipedia)
 
 The DS18B20 sensor has 3 coloured wires. Red for power(VCC), Yellow for data, and Black for ground. The breakout board that came with the sensors has labels on it (VCC, data, ground). I used a female to female jumper wires to connect the breakout board to the RPi pins. The VCC is connected to the 3V3 (pin 1), the data wire to the GPIO4- I2C (pin 7) and ground wire to ground(pin 7). Please note that the One Wire interfaces needs and I2C pin.
 
@@ -127,19 +127,24 @@ Web Dashboard:
 <img src="https://github.com/emanlapaz/projectfishtank/blob/main/images/new_dash.png" width=50% height=50%>
 
 
-On my web dashboard, I have 3 sets of buttons for the Light, Feed and Clean Switches. The LED widgets will light up corresponding to the switches toggled.
+On my web dashboard, I have 3 sets of buttons for the Light, Feed and Clean Switches. The LED widgets will light up corresponding to the switches toggled. The Feed and Clean Switch will hold the Alarm system and will not light up and capture an image when the fishtank lid is removed
 
 I also have Line Charts for the Water and Room Sensors and Bar charts to log in the Alarm Triggered function, Feed Log and the Cleaning Log. I have label widgets to show the date and time of the recent alarm trigger and labels showing the room and water status.
 
 
 Aside from the web dashboard, I also have a Blynk mobile app with the Swtiches and Charts. If a Blynk Event is Triggered, I will receive a push notification on my mobile phone. A critical event will sound an Alarm.
 
-DataStreams
+DataStreams:
+
+I used multiple datastreams to build my Blynk app. I used Integer, String and Enumerable for the data types.
+
 
 <img src="https://github.com/emanlapaz/projectfishtank/blob/main/images/datastreams.png" width=50% height=50%>
 
+
 Events
 
+The Events serves as the main notification function for this IOT project. I have set Alarm triggered function to Critical Event. This will push a notification to my mobile device (push notification plus alarm sound) when the alarm is tripped. There are also set events for the temperature sensors.
 
 <img src="https://github.com/emanlapaz/projectfishtank/blob/main/images/events.png" width=50% height=50%>
 
@@ -196,6 +201,12 @@ TO DOS/ IMPROVEMENTS:
 2. Try threading if it works
 3. Add feed/cleaning due timers- notifies when feed/cleaning due
 4. Display multiple captured images on the Glitch APP
+
+INSTRUCTIONAL VIDEOS:
+
+SenseHat: https://youtu.be/lRQ48V8p06k
+
+Ds18B20 temperature sensors: https://youtu.be/j7LLVkPpQ78
 
 
 REFERENCES/SOURCES:
