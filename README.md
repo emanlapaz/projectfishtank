@@ -13,7 +13,7 @@ Project Repo: https://github.com/emanlapaz/projectfishtank
 
 Glitch URL: https://angry-uttermost-gaura.glitch.me/
 
-Youtube Video Link: https://youtu.be/fqZVge_55nU
+Youtube Video Link: https://youtu.be/JSSJBrVIrxI
 
 PROJECT INFOGRAPHIC:
 
